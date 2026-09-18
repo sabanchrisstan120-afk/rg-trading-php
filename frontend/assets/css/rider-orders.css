@@ -1,0 +1,142 @@
+/* Rider orders page styles */
+#rider-orders-page .status-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+#rider-orders-page .status-dropdown .dropdown-toggle {
+  width: 100%;
+  text-align: left;
+}
+
+#rider-orders-page .status-dropdown .dropdown-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.12);
+  z-index: 50;
+  overflow: hidden;
+}
+
+#rider-orders-page .status-dropdown .dropdown-menu.is-open {
+  display: block;
+}
+
+#rider-orders-page .status-dropdown .dropdown-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  color: #111827;
+  transition: background 0.15s;
+}
+
+#rider-orders-page .status-dropdown .dropdown-option:hover {
+  background: #f3f4f6;
+}
+
+#rider-orders-page .status-dropdown .dropdown-option.is-selected {
+  background: #eff6ff;
+  font-weight: 600;
+}
+
+#rider-orders-page .orders-table {
+  overflow-x: auto;
+}
+
+#rider-orders-page .orders-table table {
+  min-width: 1080px;
+}
+
+#rider-orders-page .orders-table th:last-child,
+#rider-orders-page .orders-table td:last-child {
+  min-width: 350px;
+}
+
+#rider-orders-page .orders-table td,
+#rider-orders-page .orders-table th {
+  vertical-align: top;
+}
+
+#rider-orders-page .delivery-form {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+  gap: 12px !important;
+  align-items: start !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  border: 2px solid #38b2ac;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f8feff;
+}
+
+#rider-orders-page .delivery-form * {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+#rider-orders-page .delivery-form .form-select,
+#rider-orders-page .delivery-form .form-input,
+#rider-orders-page .delivery-form .btn-sm,
+#rider-orders-page .delivery-form .status-dropdown {
+  min-width: 0;
+  width: 100%;
+}
+
+#rider-orders-page .proof-row {
+  margin-top: 6px;
+}
+
+#rider-orders-page .proof-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: #374151;
+  cursor: pointer;
+}
+
+#rider-orders-page .proof-label input[type="file"] {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#rider-orders-page .proof-label {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: #374151;
+  cursor: pointer;
+}
+
+#rider-orders-page .proof-preview {
+  margin-top: 6px;
+  max-width: 120px;
+  max-height: 90px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  object-fit: cover;
+}
+
+#rider-orders-page .delivery-message {
+  font-size: 12px;
+  margin-top: 4px;
+  padding: 4px 0;
+}

@@ -1,0 +1,7 @@
+{
+  "name": "rg-trading/dashboard-export",
+  "description": "Admin dashboard spreadsheet export utilities",
+  "require": {
+    "phpoffice/phpspreadsheet": "^1.29"
+  }
+}

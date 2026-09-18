@@ -1,0 +1,98 @@
+const { adminOnly } = require('../middleware/admin');
+const express = require('express');
+const { body, param, query } = require('express-validator');
+const router = express.Router();
+
+const {
+  placeOrder, getMyOrders, getAllOrders, getOrder, cancelOrder,
+  recordPayment, getAddresses, addAddress, deleteAddress,
+} = require('../controllers/order.controller');
+const { authenticate } = require('../middleware/auth');
+const { validate } = require('../middleware/validate');
+
+// All order routes require authentication
+router.use(authenticate);
+
+// ─── Addresses ────────────────────────────────────────────────────────────────
+
+router.get('/addresses', getAddresses);
+
+router.post('/addresses', [
+  body('street').trim().notEmpty().withMessage('Street address required'),
+  body('city').trim().notEmpty().withMessage('City required'),
+  body('province').trim().notEmpty().withMessage('Province required'),
+  body('label').optional().isString(),
+  body('zip_code').optional().isPostalCode('PH'),
+  body('is_default').optional().isBoolean(),
+  validate,
+], addAddress);
+
+router.delete('/addresses/:id', [
+  param('id').isUUID(),
+  validate,
+], deleteAddress);
+
+// ─── Admin ────────────────────────────────────────────────────────────────────
+
+// IMPORTANT: /admin must be before /:id
+router.get('/admin', adminOnly, [
+  query('status').optional().isIn(['pending','pending_review','confirmed','approved','processing','shipped','delivered','cancelled','refunded','rejected']),
+  query('page').optional().isInt({ min: 1 }),
+  query('limit').optional().isInt({ min: 1, max: 50 }),
+  validate,
+], getAllOrders);
+
+// ─── Orders ───────────────────────────────────────────────────────────────────
+
+router.post('/', [
+  body('items').isArray({ min: 1 }).withMessage('At least one item required'),
+  body('items.*.product_id').isUUID().withMessage('Valid product_id required for each item'),
+  body('items.*.quantity').isInt({ min: 1 }).withMessage('Quantity must be at least 1'),
+  body('address_id').optional().isUUID(),
+  body('address').optional().isObject(),
+  body('address.street').if(body('address').exists()).trim().notEmpty().withMessage('Street is required'),
+  body('address.city').if(body('address').exists()).trim().notEmpty().withMessage('City is required'),
+  body('address.province').if(body('address').exists()).trim().notEmpty().withMessage('Province is required'),
+  body('address.zip').if(body('address').exists()).trim().notEmpty().withMessage('ZIP code is required'),
+  body('payment_method').optional().isIn(['gcash','bank_transfer','credit_card','cash_on_delivery','maya']),  body('payment_reference').optional().isString().trim().isLength({ min: 1, max: 255 }).withMessage('Payment reference is required when provided'),
+  body('contact_number').optional().isString().trim().isLength({ min: 1, max: 50 }).withMessage('Contact number is required when provided'),
+  body('phone').optional().isString().trim().isLength({ min: 1, max: 50 }).withMessage('Phone is required when provided'),
+  body('customer_phone').optional().isString().trim().isLength({ min: 1, max: 50 }).withMessage('Customer phone is required when provided'),  body('notes').optional().isString().isLength({ max: 500 }),
+  validate,
+], placeOrder);
+
+router.get('/', [
+  query('status').optional().isIn(['pending','pending_review','confirmed','approved','processing','shipped','delivered','cancelled','refunded','rejected']),
+  query('page').optional().isInt({ min: 1 }),
+  query('limit').optional().isInt({ min: 1, max: 50 }),
+  validate,
+], getMyOrders);
+
+// Compatibility alias for older clients
+router.get('/my-orders', [
+  query('status').optional().isIn(['pending','pending_review','confirmed','approved','processing','shipped','delivered','cancelled','refunded','rejected']),
+  query('page').optional().isInt({ min: 1 }),
+  query('limit').optional().isInt({ min: 1, max: 50 }),
+  validate,
+], getMyOrders);
+
+router.get('/:id', [
+  param('id').isUUID(),
+  validate,
+], getOrder);
+
+router.post('/:id/cancel', [
+  param('id').isUUID(),
+  validate,
+], cancelOrder);
+
+router.post('/:id/pay', [
+  param('id').isUUID(),
+  body('payment_method').isIn(['gcash','bank_transfer','credit_card','cash_on_delivery','maya'])
+    .withMessage('Valid payment method required'),
+  body('reference_number').optional().isString().trim().isLength({ min: 1, max: 255 }).withMessage('Reference number must be 1-255 characters'),
+  validate,
+], recordPayment);
+
+// THIS MUST BE THE ONLY module.exports AT THE BOTTOM
+module.exports = router;

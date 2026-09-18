@@ -1,0 +1,73 @@
+# =========================
+# Environment / Secrets
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Node.js
+# =========================
+backend/node_modules/
+backend/npm-debug.log*
+backend/yarn-debug.log*
+backend/yarn-error.log*
+
+# =========================
+# PHP local environment
+# =========================
+frontend/.env
+frontend/.env.local
+
+# =========================
+# Git repositories inside projects
+# =========================
+frontend/.git/
+backend/.git/
+
+# =========================
+# Runtime / temporary files
+# =========================
+frontend/tmp/
+backend/tmp/
+*.log
+*.tmp
+
+# =========================
+# IDE
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# Operating system
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Local backup files
+# =========================
+*.bak
+
+# PHP Composer dependencies
+frontend/vendor/
+
+# Runtime uploaded files
+backend/uploads/
+backend/src/uploads/
+
+# =========================
+# Runtime uploaded files
+# =========================
+backend/uploads/delivery_proofs/*
+!backend/uploads/delivery_proofs/.gitkeep
+
+frontend/uploads/order-state-store.json
+
+# =========================
+# Temporary/test files
+# =========================
+backend/tmp_*
+frontend/tmp_*
+frontend/js_parse_output.txt
